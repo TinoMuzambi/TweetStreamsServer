@@ -11,12 +11,17 @@ const TOKEN = process.env.TWITTER_TOKEN;
 const app = express();
 app.use(cors());
 const server = http.createServer(app);
-const io = socket(server);
+const io = socket(server, {
+	cors: {
+		origin: "http://localhost:3000",
+		methods: ["GET", "POST"],
+	},
+});
 const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
-	"https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics&expansions=author_id";
+	"https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics&expansions=attachments.media_keys,author_id";
 
-const rules = [{ value: "coding" }];
+const rules = [{ value: "coding has:media" }];
 
 // Get stream rules
 const getRules = async () => {
@@ -85,6 +90,7 @@ const streamTweets = (socket) => {
 };
 
 io.on("connection", async () => {
+	console.log("Client connected");
 	let currentRules;
 	try {
 		currentRules = await getRules();
