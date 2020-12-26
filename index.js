@@ -81,8 +81,9 @@ const streamTweets = (socket) => {
 	stream.on("data", (data) => {
 		try {
 			const json = JSON.parse(data);
-			console.log("server", json);
+			// console.log("server", json);
 			socket.emit("tweet", json);
+			console.log("emitted");
 		} catch (error) {}
 	});
 };
@@ -115,19 +116,21 @@ app.get("/start/:query", async (req, res) => {
 		process.exit(1);
 	}
 
-	const stream = needle.get(streamURL, {
-		headers: {
-			Authorization: `Bearer ${TOKEN}`,
-		},
-	});
+	streamTweets(io);
 
-	stream.on("data", (data) => {
-		try {
-			const json = JSON.parse(data);
-			console.log("server", json);
-			socket.emit("tweet", json);
-		} catch (error) {}
-	});
+	// const stream = needle.get(streamURL, {
+	// 	headers: {
+	// 		Authorization: `Bearer ${TOKEN}`,
+	// 	},
+	// });
+
+	// stream.on("data", (data) => {
+	// 	try {
+	// 		const json = JSON.parse(data);
+	// 		console.log("server", json);
+	// 		socket.emit("tweet", json);
+	// 	} catch (error) {}
+	// });
 });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
