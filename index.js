@@ -21,8 +21,6 @@ const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
 	"https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics&expansions=attachments.media_keys,author_id";
 
-const rules = [{ value: "lockdown has:media" }];
-
 // Get stream rules
 const getRules = async () => {
 	const response = await needle("get", rulesURL, {
@@ -36,7 +34,7 @@ const getRules = async () => {
 };
 
 // Set stream rules
-const setRules = async () => {
+const setRules = async (rules) => {
 	const data = {
 		add: rules,
 	};
@@ -91,17 +89,45 @@ const streamTweets = (socket) => {
 
 io.on("connection", async () => {
 	console.log("Client connected");
+	// let currentRules;
+	// try {
+	// 	currentRules = await getRules();
+	// 	await deleteRules(currentRules);
+	// 	await setRules();
+	// } catch (error) {
+	// 	console.error(error);
+	// 	process.exit(1);
+	// }
+
+	// streamTweets(io);
+});
+
+app.get("/start/:query", async (req, res) => {
+	const rules = [{ value: `${req.params.query} has:media` }];
+
 	let currentRules;
 	try {
 		currentRules = await getRules();
 		await deleteRules(currentRules);
-		await setRules();
+		await setRules(rules);
 	} catch (error) {
 		console.error(error);
 		process.exit(1);
 	}
 
-	streamTweets(io);
+	const stream = needle.get(streamURL, {
+		headers: {
+			Authorization: `Bearer ${TOKEN}`,
+		},
+	});
+
+	stream.on("data", (data) => {
+		try {
+			const json = JSON.parse(data);
+			console.log("server", json);
+			socket.emit("tweet", json);
+		} catch (error) {}
+	});
 });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
