@@ -6,7 +6,7 @@ const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
 	"https://api.twitter.com/2/tweets/search/stream/?tweet.fields=public_metrics&expansions=author_id";
 
-const rules = [{ value: "giveaway" }, { value: "xbox" }];
+const rules = [{ value: "giveaway" }];
 
 // Get stream rules
 const getRules = async () => {
@@ -62,7 +62,7 @@ const deleteRules = async (rules) => {
 	let currentRules;
 	try {
 		currentRules = await getRules();
-		// await deleteRules(currentRules);
+		await deleteRules(currentRules);
 		await setRules();
 	} catch (error) {
 		console.error(error);
