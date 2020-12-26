@@ -83,27 +83,16 @@ const streamTweets = (socket) => {
 			const json = JSON.parse(data);
 			// console.log("server", json);
 			socket.emit("tweet", json);
-			console.log("emitted");
 		} catch (error) {}
 	});
 };
 
 io.on("connection", async () => {
 	console.log("Client connected");
-	// let currentRules;
-	// try {
-	// 	currentRules = await getRules();
-	// 	await deleteRules(currentRules);
-	// 	await setRules();
-	// } catch (error) {
-	// 	console.error(error);
-	// 	process.exit(1);
-	// }
-
-	// streamTweets(io);
 });
 
 app.get("/start/:query", async (req, res) => {
+	console.log("Starting");
 	const rules = [{ value: `${req.params.query} has:media` }];
 
 	let currentRules;
@@ -118,19 +107,12 @@ app.get("/start/:query", async (req, res) => {
 
 	streamTweets(io);
 
-	// const stream = needle.get(streamURL, {
-	// 	headers: {
-	// 		Authorization: `Bearer ${TOKEN}`,
-	// 	},
-	// });
+	res.status(200).send("Streaming");
+});
 
-	// stream.on("data", (data) => {
-	// 	try {
-	// 		const json = JSON.parse(data);
-	// 		console.log("server", json);
-	// 		socket.emit("tweet", json);
-	// 	} catch (error) {}
-	// });
+app.get("/stop", async (req, res) => {
+	console.log("Stopping");
+	res.status(200).send("Stopped.");
 });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
