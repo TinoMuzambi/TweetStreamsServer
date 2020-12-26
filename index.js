@@ -4,7 +4,7 @@ const TOKEN = process.env.TWITTER_TOKEN;
 
 const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
-	"https://api.twitter.com/2/tweets/search/stream/?tweet.fields=public_metrics&expansions=author_id";
+	"https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics&expansions=author_id";
 
 const rules = [{ value: "giveaway" }];
 
@@ -16,7 +16,7 @@ const getRules = async () => {
 		},
 	});
 
-	console.log(response.body);
+	// console.log(response.body);
 	return response.body;
 };
 
@@ -58,6 +58,21 @@ const deleteRules = async (rules) => {
 	return response.body;
 };
 
+const streamTweets = () => {
+	const stream = needle.get(streamURL, {
+		headers: {
+			Authorization: `Bearer ${TOKEN}`,
+		},
+	});
+
+	stream.on("data", (data) => {
+		try {
+			const json = JSON.parse(data);
+			console.log(json);
+		} catch (error) {}
+	});
+};
+
 (async () => {
 	let currentRules;
 	try {
@@ -68,4 +83,6 @@ const deleteRules = async (rules) => {
 		console.error(error);
 		process.exit(1);
 	}
+
+	streamTweets();
 })();
