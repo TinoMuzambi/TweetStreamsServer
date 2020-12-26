@@ -3,11 +3,13 @@ const dotenv = require("dotenv").config();
 const http = require("http");
 const express = require("express");
 const socket = require("socket.io");
+const cors = require("cors");
 
 const PORT = process.env.PORT || 5000;
 const TOKEN = process.env.TWITTER_TOKEN;
 
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
 const io = socket(server, {
 	origins: ["https://live-tweet-stream.herokuapp.com/"],
