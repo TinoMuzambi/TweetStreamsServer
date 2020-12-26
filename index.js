@@ -123,7 +123,7 @@ app.get("/stop", async (req, res) => {
 	res.status(200).send("Stopped.");
 });
 
-app.get("/", (res) => {
+app.get("/", (req, res) => {
 	res.status(200).send("Tweet Streams Backend.");
 });
 
