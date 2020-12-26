@@ -9,7 +9,18 @@ const TOKEN = process.env.TWITTER_TOKEN;
 
 const app = express();
 const server = http.createServer(app);
-const io = socket(server);
+const io = socket(server, {
+	origins: ["https://live-tweet-stream.herokuapp.com/"],
+
+	handlePreflightRequest: (req, res) => {
+		res.writeHead(200, {
+			"Access-Control-Allow-Origin": "https://live-tweet-stream.herokuapp.com/",
+			"Access-Control-Allow-Methods": "GET,POST",
+			"Access-Control-Allow-Credentials": true,
+		});
+		res.end();
+	},
+});
 const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
 	"https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics&expansions=author_id";
