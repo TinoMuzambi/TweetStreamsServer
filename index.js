@@ -6,7 +6,7 @@ const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
 	"https://api.twitter.com/2/tweets/search/stream/?tweet.fields=public_metrics&expansions=author_id";
 
-const rules = [{ value: "giveaway" }];
+const rules = [{ value: "giveaway" }, { value: "xbox" }];
 
 // Get stream rules
 const getRules = async () => {
@@ -36,11 +36,34 @@ const setRules = async () => {
 	return response.body;
 };
 
+// Delete stream rules
+const deleteRules = async (rules) => {
+	if (!Array.isArray(rules.data)) {
+		return null;
+	}
+
+	const data = {
+		delete: {
+			ids: rules.data.map((rule) => rule.id),
+		},
+	};
+
+	const response = await needle("post", rulesURL, data, {
+		headers: {
+			"content-type": "application/json",
+			Authorization: `Bearer ${TOKEN}`,
+		},
+	});
+
+	return response.body;
+};
+
 (async () => {
 	let currentRules;
 	try {
-		await setRules();
 		currentRules = await getRules();
+		// await deleteRules(currentRules);
+		await setRules();
 	} catch (error) {
 		console.error(error);
 		process.exit(1);
