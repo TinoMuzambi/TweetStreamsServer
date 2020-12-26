@@ -5,15 +5,21 @@ const express = require("express");
 const socket = require("socket.io");
 const cors = require("cors");
 
+// Config
 const PORT = process.env.PORT || 5000;
 const TOKEN = process.env.TWITTER_TOKEN;
 
+// Initialise server
 const app = express();
+
+// Middleware
 app.use(cors());
+
+// Create server and socket.io setup
 const server = http.createServer(app);
 const io = socket(server, {
 	cors: {
-		origin: "http://localhost:3000",
+		origin: "https://tweet-streams.vercel.app/",
 		methods: ["GET", "POST"],
 	},
 });
@@ -71,6 +77,7 @@ const deleteRules = async (rules) => {
 	return response.body;
 };
 
+// Start streaming tweets.
 const streamTweets = (socket) => {
 	const stream = needle.get(streamURL, {
 		headers: {
@@ -91,6 +98,7 @@ io.on("connection", async () => {
 	console.log("Client connected");
 });
 
+// Server routes.
 app.get("/start/:query", async (req, res) => {
 	console.log("Starting");
 	const rules = [{ value: `${req.params.query} has:media` }];
@@ -115,4 +123,9 @@ app.get("/stop", async (req, res) => {
 	res.status(200).send("Stopped.");
 });
 
+app.get("/", (res) => {
+	res.status(200).send("Tweet Streams Backend.");
+});
+
+// Server listen.
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
