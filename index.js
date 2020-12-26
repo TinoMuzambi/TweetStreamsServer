@@ -21,7 +21,7 @@ const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
 	"https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics&expansions=attachments.media_keys,author_id";
 
-const rules = [{ value: "coding has:media" }];
+const rules = [{ value: "lockdown has:media" }];
 
 // Get stream rules
 const getRules = async () => {
@@ -83,7 +83,7 @@ const streamTweets = (socket) => {
 	stream.on("data", (data) => {
 		try {
 			const json = JSON.parse(data);
-			// console.log(json);
+			console.log("server", json);
 			socket.emit("tweet", json);
 		} catch (error) {}
 	});
