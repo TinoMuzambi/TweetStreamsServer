@@ -1,12 +1,20 @@
 const needle = require("needle");
 const dotenv = require("dotenv").config();
+const http = require("http");
+const express = require("express");
+const socket = require("socket.io");
+
+const PORT = process.env.PORT || 5000;
 const TOKEN = process.env.TWITTER_TOKEN;
 
+const app = express();
+const server = http.createServer(app);
+const io = socket(server);
 const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
 	"https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics&expansions=author_id";
 
-const rules = [{ value: "giveaway" }];
+const rules = [{ value: "coding" }];
 
 // Get stream rules
 const getRules = async () => {
@@ -73,16 +81,20 @@ const streamTweets = () => {
 	});
 };
 
-(async () => {
-	let currentRules;
-	try {
-		currentRules = await getRules();
-		await deleteRules(currentRules);
-		await setRules();
-	} catch (error) {
-		console.error(error);
-		process.exit(1);
-	}
+io.on("connection", () => console.log("Client connected"));
 
-	streamTweets();
-})();
+// (async () => {
+// 	let currentRules;
+// 	try {
+// 		currentRules = await getRules();
+// 		await deleteRules(currentRules);
+// 		await setRules();
+// 	} catch (error) {
+// 		console.error(error);
+// 		process.exit(1);
+// 	}
+
+// 	streamTweets();
+// })();
+
+server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
