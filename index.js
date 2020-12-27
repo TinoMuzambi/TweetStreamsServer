@@ -4,6 +4,7 @@ const http = require("http");
 const express = require("express");
 const socket = require("socket.io");
 const cors = require("cors");
+const { exec } = require("child_process");
 
 // Config
 const PORT = process.env.PORT || 5000;
@@ -122,7 +123,8 @@ app.get("/start/:query", async (req, res) => {
 app.get("/stop", async (req, res) => {
 	console.log("Stopping");
 	res.status(200).send("Stopped.");
-	process.exit(0);
+	// process.exit(0);
+	exec("heroku", "restart");
 });
 
 app.get("/", (req, res) => {
