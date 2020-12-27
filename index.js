@@ -92,7 +92,6 @@ const streamTweets = (socket) => {
 			const json = JSON.parse(data);
 			// console.log("server", json);
 			socket.emit("tweet", json);
-			console.log("emitted");
 		} catch (error) {}
 	});
 };
@@ -123,6 +122,7 @@ app.get("/start/:query", async (req, res) => {
 app.get("/stop", async (req, res) => {
 	console.log("Stopping");
 	res.status(200).send("Stopped.");
+	process.exit(0);
 });
 
 app.get("/", (req, res) => {
