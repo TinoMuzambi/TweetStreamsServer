@@ -15,5 +15,5 @@ The API is freely available at this [URL](https://developer.twitter.com/)
 To run this app in development, clone this repo and then run the following commands:
 
 1. `cd TweetStreamsServer`
-2. `yarn`
-3. `yarn start`
+2. `npm i`
+3. `npm start`
