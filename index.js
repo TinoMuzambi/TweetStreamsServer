@@ -90,6 +90,7 @@ const streamTweets = (socket) => {
 			const json = JSON.parse(data);
 			// console.log("server", json);
 			socket.emit("tweet", json);
+			console.log("emitted");
 		} catch (error) {}
 	});
 };
