@@ -97,6 +97,9 @@ const streamTweets = (socket) => {
 			socket.local.emit("tweet", json);
 		} catch (error) {}
 	});
+	setTimeout(() => {
+		process.exit(0);
+	}, 30000);
 };
 
 io.on("connection", async () => {
