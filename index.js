@@ -88,6 +88,7 @@ const streamTweets = (socket) => {
 	});
 
 	console.log("Streaming...");
+	stream.resume();
 
 	stream.on("data", (data) => {
 		try {
