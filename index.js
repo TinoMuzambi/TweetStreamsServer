@@ -116,7 +116,7 @@ app.get("/start/:query", async (req, res) => {
 
 	streamTweets(io);
 
-	res.status(200).send("Streaming");
+	// res.status(200).send("Streaming");
 });
 
 app.get("/stop", async (req, res) => {
