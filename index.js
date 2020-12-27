@@ -19,7 +19,7 @@ app.use(cors());
 const server = http.createServer(app);
 const io = socket(server, {
 	cors: {
-		origin: "https://live-tweet-stream.herokuapp.com/",
+		origin: "*",
 		methods: ["GET", "POST"],
 	},
 });
