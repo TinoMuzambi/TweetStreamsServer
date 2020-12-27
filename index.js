@@ -27,6 +27,7 @@ const io = socket(server, {
 const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
 	"https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics&expansions=attachments.media_keys,author_id";
+let stream;
 
 // Get stream rules
 const getRules = async () => {
@@ -80,7 +81,7 @@ const deleteRules = async (rules) => {
 
 // Start streaming tweets.
 const streamTweets = (socket) => {
-	const stream = needle.get(streamURL, {
+	stream = needle.get(streamURL, {
 		headers: {
 			Authorization: `Bearer ${TOKEN}`,
 		},
@@ -124,17 +125,18 @@ app.get("/stop", async (req, res) => {
 	console.log("Stopping");
 	res.status(200).send("Stopped.");
 	// process.exit(0);
-	exec("heroku restart", (error, stdout, stderr) => {
-		if (error) {
-			console.log(`error: ${error.message}`);
-			return;
-		}
-		if (stderr) {
-			console.log(`stderr: ${stderr}`);
-			return;
-		}
-		console.log(`stdout: ${stdout}`);
-	});
+	// exec("heroku restart", (error, stdout, stderr) => {
+	// 	if (error) {
+	// 		console.log(`error: ${error.message}`);
+	// 		return;
+	// 	}
+	// 	if (stderr) {
+	// 		console.log(`stderr: ${stderr}`);
+	// 		return;
+	// 	}
+	// 	console.log(`stdout: ${stdout}`);
+	// });
+	stream.pause();
 });
 
 app.get("/", (req, res) => {
