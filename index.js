@@ -137,7 +137,7 @@ app.get("/stop", async (req, res) => {
 	// 	}
 	// 	console.log(`stdout: ${stdout}`);
 	// });
-	stream.pause();
+	// stream.pause();
 });
 
 app.get("/", (req, res) => {
