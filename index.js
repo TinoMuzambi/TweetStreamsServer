@@ -85,6 +85,8 @@ const streamTweets = (socket) => {
 		},
 	});
 
+	console.log("Streaming...");
+
 	stream.on("data", (data) => {
 		try {
 			const json = JSON.parse(data);
@@ -116,7 +118,7 @@ app.get("/start/:query", async (req, res) => {
 
 	streamTweets(io);
 
-	while (true) {}
+	res.status(200).send("Streaming");
 });
 
 app.get("/stop", async (req, res) => {
