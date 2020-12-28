@@ -1,6 +1,6 @@
 # Live Tweet Streams Server
 
-Using the Twitter API to produce a live stream of tweet that match a given query.
+Using the Twitter API to produce a live stream of tweets that match a given query.
 
 ## Front-end
 
