@@ -26,7 +26,7 @@ const io = socket(server, {
 });
 const rulesURL = "https://api.twitter.com/2/tweets/search/stream/rules";
 const streamURL =
-	"https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics,attachments&expansions=attachments.media_keys,author_id";
+	"https://api.twitter.com/2/tweets/search/stream?tweet.fields=public_metrics,attachments&expansions=attachments.media_keys,author_id&media.fields=url";
 let stream;
 
 // Get stream rules
